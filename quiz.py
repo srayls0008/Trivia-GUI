@@ -1,37 +1,148 @@
 from tkinter import *
-from PIL import ImageTk,Image
+# from PIL import ImageTk,Image
+from tkinter import messagebox
+import sys
 
-root = Tk()
-root.title('Trivia-to-Go')
-#root.iconbitmap()
+#questions and anwers to pull from
+question= [
+    "Q1. What was the first state?",
+    "Q2. What is the name of Mickey Mouse's girlfriend",
+    "Q3. What is the largest land mammal?",
+    "Q4. Which US city is home to the Space Needle?",
+    "Q5. Who was the first president of the US?"
+  ]
 
-frame = Frame(root, padx=20, pady=20)
-frame.pack()
+answer= [
+    4,
+    2,
+    3,
+    2,
+    1
+  ]
 
-bottomframe = Frame(root)
-bottomframe.pack( side = BOTTOM )
+option1= [
+     "Indiana",
+     "Daisy",
+     "Tiger",
+     "New York",
+     "Washington"
+    ]
 
-r = IntVar()
-r.get()
+option2= [
+      "Kentucky",
+      "Minnie",
+      "Anteater",
+      "Seattle",
+      "Carver"
+    ]
 
-def clicked(value):
-    myLabel = Label(root, text = r.get())
-    myLabel.pack()
+option3= [
+      "California",
+      "Ethel",
+      "Elephant",
+      "Miami",
+      "Obama"
+      
+    ]
+
+option4= [
+      "Delaware",
+      "Ruby",
+      "Gorilla",
+      "San Antonio",
+      "Disney"
+    ]
+
+
+
     
-Radiobutton(root, text = "", variable=r, value=1).pack()
-Radiobutton(root, text = "", variable=r, value=2).pack()
-Radiobutton(root, text = "", variable=r, value=3).pack()
-Radiobutton(root, text = "", variable=r, value=4).pack()
+#start window
+root = Tk()
+root.title('Begin Trivia')
+root.iconbitmap()
+
+#set window size
+root.geometry("300x200")
+
+#creating the frame
+frame = LabelFrame(root, padx=10, pady=10)
+frame.pack(padx=15, pady=15)
 
 
 
-myButton= Button(root, text= "Submit Answer", command=lambda:clicked(r.get()))
-myButton.pack()                
+#trivia window
+global x
+x=0
+def openFunction():
+    top = Toplevel()
+    top.title("Trivia-to-Go")
+    top.geometry("500x500")
+    
+    
+    #creating the frame
+    frame = LabelFrame(top, padx=10, pady=10)
+    frame.pack(padx=15, pady=15)
 
-button_quit = Button(root, text="Exit Program", command=root.quit)
-button_quit.pack()
+    #shows the question
+    LabelQuestion = Label(frame, text="") 
+    LabelQuestion.pack() 
+    
+    
 
-root.mainloop()
+    r = IntVar()
+    r.get()
+
+
+    #function that shows what was clicked
+    def clicked(value):
+        global x
+        myLabel = Label(frame, text = r.get())
+        myLabel.pack()
+        #messagebox.showinfo("Results", r.get())
+        if r.get() == answer[x]:
+            messagebox.showinfo("Results", "Correct")
+        else:
+            messagebox.showinfo("Results", "Incorrect")
+        x+=1
+        if x == 5:
+            sys.exit()
+            
+        
+        
+        openFunction()
+
+    #create radio buttons    
+    radio1 = Radiobutton(frame, text = "", variable=r, value=1)
+    radio2 = Radiobutton(frame, text = "", variable=r, value=2)
+    radio3 = Radiobutton(frame, text = "", variable=r, value=3)
+    radio4 = Radiobutton(frame, text = "", variable=r, value=4)
+
+    radio1.pack()
+    radio2.pack()
+    radio3.pack()
+    radio4.pack()
+
+    #display questions and answers
+    LabelQuestion.config(text = question[x])
+    radio1.config(text = option1[x])
+    radio2.config(text = option2[x])
+    radio3.config(text = option3[x])
+    radio4.config(text = option4[x])
+
+
+
+    #submit answer and quit buttons
+    myButton= Button(frame, text= "Submit Answer", command=lambda:clicked(r.get()))
+    myButton.pack()
+    
+
+    button_quit = Button(frame, text="Exit Program", command=top.destroy)
+    button_quit.pack()
+
+btn = Button(root, text = "Start", padx = 50, pady = 10, command = openFunction)
+btn.pack()
+
+mainloop()
 
 
 
